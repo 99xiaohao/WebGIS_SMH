@@ -1,28 +1,54 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app" style="height:100%">
+    <el-container style="height:100%">
+      <el-header height="10%">石漠化数据服务平台</el-header>
+      <el-main>
+        <Main></Main>
+      </el-main>
+      <el-footer>Footer</el-footer>
+    </el-container>
   </div>
 </template>
 
+
+
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Header from "@/components/Header";
+import Main from "@/components/Main";
+import Footer from "@/components/Footer";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    Header,
+    Footer,
+    Main,
+  },
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+html,body{
+ margin:0;
+ height:100%;
 }
+
+.el-header,
+.el-footer {
+  background-color: #B3C0D1;
+    color: #333;
+    text-align: left;
+    line-height: 60px;
+}
+
+
+.el-main {
+  /* background-color: #e9eef3; */
+  color: #333;
+  text-align: center;
+  line-height:  60px;
+  padding:0;
+}
+
+
 </style>
