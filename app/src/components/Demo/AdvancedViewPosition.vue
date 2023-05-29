@@ -31,6 +31,7 @@ export default {
         format: new GeoJSON(),
       });
 
+      //新建矢量图层
       const vectorLayer = new VectorLayer({
         source: source,
         style: {
@@ -44,10 +45,12 @@ export default {
         },
       });
 
+      //新建视图
       const view = new View({
         center: [0, 0],
         zoom: 1,
       });
+      //新建map当作容器
       const map = new Map({
         layers: [
           new TileLayer({
@@ -58,13 +61,13 @@ export default {
         target: 'map',
         view: view,
       });
+      //将view，source，map存入vuex中
       this.$store.commit('_setDefaultMapView', view);
       this.$store.commit('_setDefaultSource', source);
       this.$store.commit('_setDefaultMap', map);
     },
     ZoomtoSwitzerland() {
       console.log(this.$store);
-      debugger;
       const feature = this.$store.state._defaultSource.getFeatures()[0];
       const polygon = feature.getGeometry();
       this.$store.state._defaultMapView.fit(polygon, { padding: [170, 50, 30, 150] });
@@ -77,7 +80,9 @@ export default {
     cneterLanusanne() {
       const feature = this.$store.state._defaultSource.getFeatures()[1];
       const point = feature.getGeometry();
+      //获取map的大小（长宽）以像素为单位，
       const size = this.$store.state._defaultMap.getSize();
+      console.log(size);
       this.$store.state._defaultMapView.centerOn(point.getCoordinates(), size, [570, 500]);
     },
   },
