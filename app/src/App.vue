@@ -2,26 +2,27 @@
   <div id="app" style="height: 100%">
     <el-container style="height: 100%">
       <el-header height="10%">石漠化数据服务平台</el-header>
-      <el-container>
-        <el-aside width="200px">
+      <el-container style="width: 100%">
+        <el-aside style="width: 15%">
           <!-- <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree> -->
           <el-menu
-            default-active="2"
             class="el-menu-vertical-demo"
             background-color="#545c64"
             text-color="#fff"
             active-text-color="#ffd04b"
+            router
           >
-            <el-submenu index="1">
+            <!-- route值为	Vue Router 路径对象 -->
+            <el-menu-item route="DemoIndex" index="1">
               <template slot="title">
                 <!-- <i class="el-icon-location"></i> -->
                 <span>Demo</span>
               </template>
-              <el-menu-item-group>
+              <!-- <el-menu-item-group>
                 <template slot="title">分组一</template>
                 <el-menu-item index="1-1">选项1</el-menu-item>
                 <el-menu-item index="1-2">选项2</el-menu-item>
-              </el-menu-item-group>
+              </el-menu-item-group> -->
               <!-- <el-menu-item-group title="分组2">
                 <el-menu-item index="1-3">选项3</el-menu-item>
               </el-menu-item-group>
@@ -29,7 +30,7 @@
                 <template slot="title">选项4</template>
                 <el-menu-item index="1-4-1">选项1</el-menu-item>
               </el-submenu> -->
-            </el-submenu>
+            </el-menu-item>
             <el-menu-item index="2">
               <!-- <i class="el-icon-menu"></i> -->
               <span slot="title">导航二</span>
@@ -45,8 +46,9 @@
             </el-menu-item>
           </el-menu>
         </el-aside>
-        <el-main>
-          <MapView />
+        <el-main style="width: 85%">
+          <router-view></router-view>
+          <!-- <MapView /> -->
         </el-main>
       </el-container>
     </el-container>
@@ -59,8 +61,8 @@
 import Header from '@/components/Header';
 import Main from '@/components/Main';
 import MapView from '@/components/common/MapView.vue';
-import AdvancedViewPosition from './components/Demo/AdvancedViewPosition.vue';
-
+import AdvancedViewPosition from '@/pages/Demo/AdvancedViewPosition.vue';
+import DemoIndex from '@/pages/Demo/index.vue';
 export default {
   name: 'App',
   components: {
@@ -154,7 +156,7 @@ body {
 
 .el-main {
   /* background-color: #e9eef3; */
-
+  width: 85%;
   color: #333;
   text-align: center;
   line-height: 60px;
@@ -170,13 +172,5 @@ body {
   height: 100%;
   width: 100%;
   /* position: absolute; */
-}
-
-.el-tree {
-  position: absolute;
-  left: 200px;
-
-  z-index: 2;
-  /* display: none; */
 }
 </style>
