@@ -1,11 +1,11 @@
 <template>
   <div id="app" style="height:100%">
     <el-container style="height:100%">
-      <el-header height="10%">石漠化数据服务平台</el-header>
+      <el-header height="15%">石漠化数据服务平台</el-header>
       <el-main>
-        <Main></Main>
+        <AdvancedViewPosition></AdvancedViewPosition>
       </el-main>
-      <el-footer>Footer</el-footer>
+      <!-- <el-footer>Footer</el-footer> -->
     </el-container>
   </div>
 </template>
@@ -16,6 +16,8 @@
 import Header from "@/components/Header";
 import Main from "@/components/Main";
 import Footer from "@/components/Footer";
+import AdvancedViewPosition from '@/components/Demo/AdvancedViewPosition.vue'
+
 
 export default {
   name: "App",
@@ -23,6 +25,7 @@ export default {
     Header,
     Footer,
     Main,
+    AdvancedViewPosition
   },
 };
 </script>
