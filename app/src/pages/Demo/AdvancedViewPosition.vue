@@ -100,7 +100,7 @@ export default {
 .buttondiv {
   position: absolute;
   bottom: 40px;
-  left: 100px;
+  left: 25%;
   z-index: 10;
 }
 </style>

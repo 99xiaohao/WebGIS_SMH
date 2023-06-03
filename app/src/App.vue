@@ -2,8 +2,8 @@
   <div id="app" style="height: 100%">
     <el-container style="height: 100%">
       <el-header height="10%">石漠化数据服务平台</el-header>
-      <el-container style="width: 100%">
-        <el-aside style="width: 15%">
+      <el-container style="width: 100%; height: 90%">
+        <el-aside width="15%">
           <!-- <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree> -->
           <el-menu
             class="el-menu-vertical-demo"
@@ -13,7 +13,7 @@
             router
           >
             <!-- route值为	Vue Router 路径对象 -->
-            <el-menu-item route="DemoIndex" index="1">
+            <el-menu-item route="Demo" index="1">
               <template slot="title">
                 <!-- <i class="el-icon-location"></i> -->
                 <span>Demo</span>
@@ -31,23 +31,25 @@
                 <el-menu-item index="1-4-1">选项1</el-menu-item>
               </el-submenu> -->
             </el-menu-item>
-            <el-menu-item index="2">
+            <el-menu-item route="Nav2" index="2">
               <!-- <i class="el-icon-menu"></i> -->
               <span slot="title">导航二</span>
             </el-menu-item>
             <!-- <el-menu-item index="3" disabled> -->
-            <el-menu-item index="3">
+            <el-menu-item route="Nav3" index="3">
               <!-- <i class="el-icon-document"></i> -->
               <span slot="title">导航三</span>
             </el-menu-item>
-            <el-menu-item index="4">
+            <el-menu-item route="Nav4" index="4">
               <!-- <i class="el-icon-setting"></i> -->
               <span slot="title">导航四</span>
             </el-menu-item>
           </el-menu>
         </el-aside>
-        <el-main style="width: 85%">
-          <router-view></router-view>
+        <el-main width="85%">
+          <router-view>
+            <router-view></router-view>
+          </router-view>
           <!-- <MapView /> -->
         </el-main>
       </el-container>
@@ -62,13 +64,14 @@ import Header from '@/components/Header';
 import Main from '@/components/Main';
 import MapView from '@/components/common/MapView.vue';
 import AdvancedViewPosition from '@/pages/Demo/AdvancedViewPosition.vue';
-import DemoIndex from '@/pages/Demo/index.vue';
+import Demo from '@/pages/Demo/index.vue';
 export default {
   name: 'App',
   components: {
     Header,
     Main,
     MapView,
+
     AdvancedViewPosition,
   },
   data() {
@@ -146,27 +149,29 @@ body {
   height: 100%;
 }
 
-.el-header,
-.el-footer {
+.el-header {
   background-color: #000000;
   color: #ffffff;
   text-align: left;
   line-height: 60px;
+  position: sticky;
 }
 
 .el-main {
   /* background-color: #e9eef3; */
-  width: 85%;
   color: #333;
   text-align: center;
   line-height: 60px;
   padding: 0;
+  box-sizing: border-box;
 }
 .el-aside {
+  box-sizing: border-box;
   background-color: #ffffff;
   color: #333;
   text-align: center;
   line-height: 200px;
+  overflow: hidden;
 }
 .el-menu {
   height: 100%;

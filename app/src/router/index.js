@@ -6,13 +6,35 @@ import VueRouter from 'vue-router';
 //使用插件
 Vue.use(VueRouter);
 //引入路由组件
-import DemoIndex from '@/pages/Demo/index.vue'
+import Demo from '@/pages/Demo/index.vue'
+import Nav2 from '@/pages/Nav2'
+import Nav3 from '@/pages/Nav3'
+import Nav4 from '@/pages/Nav4'
 import AdvancedViewPosition from '@/pages/Demo/AdvancedViewPosition.vue'
 import AnimatedGIF from "@/pages/Demo/AnimatedGIF.vue"
-
+import ArcGISRestFeature from '@/pages/Demo/ArcGISRestFeature.vue'
 //配置路由
 export default new VueRouter({
     routes:[
+       
+        {
+            path:"/Demo",
+            component:Demo,
+
+        },
+       
+        {
+            path:'/nav2',
+            component:Nav2
+        },
+        {
+            path:'/nav3',
+            component:Nav3
+        },
+        {
+            path:'/nav4',
+            component:Nav4
+        },
         {
             path:"/AdvancedViewPosition",
             component:AdvancedViewPosition
@@ -22,13 +44,13 @@ export default new VueRouter({
             component:AnimatedGIF
         },
         {
-            path:"/DemoIndex",
-            component:DemoIndex
+            path:"/ArcGISRestFeature",
+            component:ArcGISRestFeature
         },
-        //重定向，在项目跑起来的时候，访问/，立马让他定向到首页
+        //重定向,访问时直接展示的页面
         {
-            path:'*',
-            redirect:DemoIndex,
+             path:'*',
+             redirect:'/Demo',
         }
         
     ],
