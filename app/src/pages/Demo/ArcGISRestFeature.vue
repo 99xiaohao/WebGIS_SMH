@@ -14,7 +14,7 @@ import { Fill, Stroke, Style } from 'ol/style.js';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer.js';
 import { createXYZ } from 'ol/tilegrid.js';
 import { fromLonLat } from 'ol/proj.js';
-import { tile as tileStrategy } from 'ol/loadingstrategy.js';
+import { tile as tileStrategy, bbox as bboxStrategy } from 'ol/loadingstrategy.js';
 export default {
   data() {
     return {};
@@ -53,7 +53,7 @@ export default {
           width: 0.5,
         }),
       });
-      
+
       const vectorSource = new VectorSource({
         //format可以理解为解析器,new EsriJSON()提供读写EsriJSON格式数据
         format: new EsriJSON(),
@@ -66,7 +66,7 @@ export default {
             .getCode()
             .split(/:(?=\d+$)/)
             .pop();
-       
+
           console.log('@', extent);
           const url =
             serviceUrl +
@@ -88,7 +88,12 @@ export default {
             srid;
           return url;
         },
-        //
+        //资源加载策略：ol.loadingstrategy有三种策略
+        /*
+        all:默认的加载策略，会在地图视图范围内加载所有数据
+        bbox：会在地图视图范围内加载当前可见区域的数据，可以提高性能。
+        tile：会根据瓦片网格加载数据，可以提高性能。
+        */
         strategy: tileStrategy(
           createXYZ({
             tileSize: 512,
@@ -117,6 +122,15 @@ export default {
             'Tiles © <a href="https://services.arcgisonline.com/ArcGIS/' +
             'rest/services/World_Topo_Map/MapServer">ArcGIS</a>',
           url: 'https://server.arcgisonline.com/ArcGIS/rest/services/' + 'World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
+        }),
+      });
+
+      const map = new Map({
+        layers: [raster, vector],
+        target: document.getElementById('map'),
+        view: new View({
+          center: fromLonLat([1.72, 52.4]),
+          zoom: 14,
         }),
       });
     },
