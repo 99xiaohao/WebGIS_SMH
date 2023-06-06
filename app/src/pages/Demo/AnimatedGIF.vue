@@ -65,7 +65,6 @@ export default {
         function (ctx, frame) {
           //要素的样式为空为其添加样式
           if (!iconFeature.getStyle()) {
-            debugger;
             iconFeature.setStyle(
               new Style({
                 image: new Icon({
@@ -92,7 +91,6 @@ export default {
         },
         true,
       );
-      debugger;
       // change mouse cursor when over icon
       map.on('pointermove', function (e) {
         //获取事件发生的像素位置

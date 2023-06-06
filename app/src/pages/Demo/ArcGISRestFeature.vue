@@ -45,7 +45,80 @@ export default {
         'Inland Water': [0, 38, 115, 1],
       };
 
-      const style = new Style({});
+      const style = new Style({
+        fill: new Fill(),
+        //线条的样式
+        stroke: new Stroke({
+          color: [0, 0, 0, 1],
+          width: 0.5,
+        }),
+      });
+      
+      const vectorSource = new VectorSource({
+        //format可以理解为解析器,new EsriJSON()提供读写EsriJSON格式数据
+        format: new EsriJSON(),
+        //url属性可以是一个返回url的字符串，
+        url: function (extent, resolution, projection) {
+          //因为ArcGIS Serve只需要投影的ID数字，所以需要截取
+          //.getCode返回类似'EPSG:4326'的值，split(/:(?=\d+$)/)将冒号和数字分开，返回一个数组
+          //.pop()删除数组的最后一个元素
+          const srid = projection
+            .getCode()
+            .split(/:(?=\d+$)/)
+            .pop();
+       
+          console.log('@', extent);
+          const url =
+            serviceUrl +
+            layer +
+            '/query/?f=json&' +
+            'returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry=' +
+            //extent视图的范围
+            encodeURIComponent(` 
+          {"xmin":${extent[0]},
+          "ymin":${extent[1]},
+          "xmax":${extent[2]},
+          "ymax":${extent[3]},
+          "spatialReference":{"wkid":${srid}}
+        }`) +
+            '&geometryType=esriGeometryEnvelope&inSR=' +
+            srid +
+            '&outFields=*' +
+            '&outSR=' +
+            srid;
+          return url;
+        },
+        //
+        strategy: tileStrategy(
+          createXYZ({
+            tileSize: 512,
+          }),
+        ),
+        attributions:
+          'University of Leicester (commissioned by the ' +
+          '<a href="https://www.arcgis.com/home/item.html?id=' +
+          'd5f05b1dc3dd4d76906c421bc1727805">National Trust</a>)',
+      });
+
+      const vector = new VectorLayer({
+        source: vectorSource,
+        style: function (feature) {
+          const classify = feature.get('LU_2014');
+          const color = fillColors[classify] || [0, 0, 0, 0];
+          style.getFill().setColor(color);
+          return style;
+        },
+        opacity: 0.7,
+      });
+
+      const raster = new TileLayer({
+        source: new XYZ({
+          attributions:
+            'Tiles © <a href="https://services.arcgisonline.com/ArcGIS/' +
+            'rest/services/World_Topo_Map/MapServer">ArcGIS</a>',
+          url: 'https://server.arcgisonline.com/ArcGIS/rest/services/' + 'World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
+        }),
+      });
     },
   },
 };
