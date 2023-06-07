@@ -26,10 +26,10 @@
       </router-link>
     </div>
     <div class="card">
-      <router-link to="/AdvancedViewPosition" class="item active">
+      <router-link to="/Attributions" class="item active">
         <el-link type="primary"
-          ><strong>AdvancedViewPosition</strong>
-          <p style="color: black">描述</p>
+          ><strong>Attributions</strong>
+          <p style="color: black">版权信息控件控制</p>
         </el-link>
       </router-link>
     </div>

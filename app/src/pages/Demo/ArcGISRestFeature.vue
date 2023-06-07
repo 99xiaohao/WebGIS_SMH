@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <div id="map" class="map"></div>
+    <div id="info"></div>
   </div>
 </template>
 
@@ -115,7 +116,7 @@ export default {
         },
         opacity: 0.7,
       });
-
+      //底图源
       const raster = new TileLayer({
         source: new XYZ({
           attributions:
@@ -133,11 +134,35 @@ export default {
           zoom: 14,
         }),
       });
+      const displayFeatureInfo = function (pixel) {
+        //forEachFeatureAtPixel检测与像素相交的要素，执行一个回调
+        const feature = map.forEachFeatureAtPixel(pixel, function (feature) {
+          return feature;
+        });
+        if (feature) {
+          //feature.get('LU_2014')获取名为lu_2014的属性值
+          const info = '2014 Land Use:' + feature.get('LU_2014') + '<br>1965 Land Use: ' + feature.get('LU_1965');
+          document.getElementById('info').innerHTML = info;
+          //修改鼠标样式    map.getTarget()获取渲染map的目标
+          map.getTarget().style.cursor = 'pointer';
+        } else {
+          document.getElementById('info').innerHTML = '&nbsp;<br>&nbsp;';
+          map.getTarget().style.cursor = '';
+        }
+      };
+      map.on(['click', 'pointermove'], function (evt) {
+        console.log('evt', evt);
+        //evt是mapbrowserEvent对象的成员，evt.dragging表示地图是否被拖动
+        if (evt.dragging) {
+          return;
+        }
+        displayFeatureInfo(evt.pixel);
+      });
     },
   },
 };
 </script>
-
+d
 <style>
 #app,
 .map {

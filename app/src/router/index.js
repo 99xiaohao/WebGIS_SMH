@@ -13,6 +13,7 @@ import Nav4 from '@/pages/Nav4'
 import AdvancedViewPosition from '@/pages/Demo/AdvancedViewPosition.vue'
 import AnimatedGIF from "@/pages/Demo/AnimatedGIF.vue"
 import ArcGISRestFeature from '@/pages/Demo/ArcGISRestFeature.vue'
+import Attributions from '@/pages/Demo/Attributions.vue'
 //配置路由
 export default new VueRouter({
     routes:[
@@ -46,6 +47,10 @@ export default new VueRouter({
         {
             path:"/ArcGISRestFeature",
             component:ArcGISRestFeature
+        },
+        {
+            path:"/Attributions",
+            component:Attributions
         },
         //重定向,访问时直接展示的页面
         {
