@@ -14,6 +14,7 @@ import AdvancedViewPosition from '@/pages/Demo/AdvancedViewPosition.vue'
 import AnimatedGIF from "@/pages/Demo/AnimatedGIF.vue"
 import ArcGISRestFeature from '@/pages/Demo/ArcGISRestFeature.vue'
 import Attributions from '@/pages/Demo/Attributions.vue'
+import BandAdjustment from '@/pages/Demo/BandAdjustment.vue'
 //配置路由
 export default new VueRouter({
     routes:[
@@ -51,6 +52,10 @@ export default new VueRouter({
         {
             path:"/Attributions",
             component:Attributions
+        },
+        {
+            path:"/BandAdjustment",
+            component:BandAdjustment
         },
         //重定向,访问时直接展示的页面
         {

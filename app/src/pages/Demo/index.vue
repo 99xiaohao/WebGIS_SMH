@@ -34,10 +34,10 @@
       </router-link>
     </div>
     <div class="card">
-      <router-link to="/AdvancedViewPosition" class="item active">
+      <router-link to="/BandAdjustment" class="item active">
         <el-link type="primary"
-          ><strong>AdvancedViewPosition</strong>
-          <p style="color: black">描述</p>
+          ><strong>BandAdjustment</strong>
+          <p style="color: black">波段对比度调节</p>
         </el-link>
       </router-link>
     </div>
