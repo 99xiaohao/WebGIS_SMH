@@ -15,6 +15,7 @@ import AnimatedGIF from "@/pages/Demo/AnimatedGIF.vue"
 import ArcGISRestFeature from '@/pages/Demo/ArcGISRestFeature.vue'
 import Attributions from '@/pages/Demo/Attributions.vue'
 import BandAdjustment from '@/pages/Demo/BandAdjustment.vue'
+import ChangeTileStyle from '@/pages/Demo/ChangeTileStyle.vue'
 //配置路由
 export default new VueRouter({
     routes:[
@@ -56,6 +57,10 @@ export default new VueRouter({
         {
             path:"/BandAdjustment",
             component:BandAdjustment
+        },
+        {
+            path:"/ChangeTileStyle",
+            component:ChangeTileStyle,
         },
         //重定向,访问时直接展示的页面
         {
