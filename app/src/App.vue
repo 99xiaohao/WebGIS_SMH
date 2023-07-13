@@ -1,7 +1,7 @@
 <template>
   <div id="app" style="height: 100%">
     <el-container style="height: 100%">
-      <el-header height="10%">小伙子的WEBGIS展示界面</el-header>
+      <el-header height="50px">小伙子的WEBGIS展示界面</el-header>
       <el-container style="width: 100%; height: 90%">
         <el-aside width="15%">
           <!-- <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree> -->
@@ -47,9 +47,7 @@
           </el-menu>
         </el-aside>
         <el-main width="85%">
-          <router-view>
-            <router-view></router-view>
-          </router-view>
+          <router-view></router-view>
           <!-- <MapView /> -->
         </el-main>
       </el-container>

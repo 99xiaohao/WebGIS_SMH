@@ -7,6 +7,7 @@ import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 //引入路由组件
 import Demo from '@/pages/Demo/index.vue'
+// vue文件以index开头的话就可以省略index.vue
 import Nav2 from '@/pages/Nav2'
 import Nav3 from '@/pages/Nav3'
 import Nav4 from '@/pages/Nav4'
