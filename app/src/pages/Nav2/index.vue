@@ -31,6 +31,9 @@ import TileLayer from 'ol/layer/Tile';
 import XYZ from 'ol/source/XYZ';
 import { transform } from 'ol/proj';
 import Tile from 'ol/Tile';
+import VectorSource from 'ol/source/Vector';
+import GeoJSON from 'ol/format/GeoJSON';
+import VectorLayer from 'ol/layer/Vector.js';
 export default {
   data() {
     return {
@@ -43,6 +46,8 @@ export default {
         'http://t0.tianditu.com/DataServer?T=cta_w&tk=d590c66c56d4cc58784f8159e8aa4ea8&x={x}&y={y}&l={z}',
       VectorUrl: 'http://t0.tianditu.com/DataServer?T=vec_w&tk=d590c66c56d4cc58784f8159e8aa4ea8&x={x}&y={y}&l={z}',
       VectorLabelUrl: 'http://t4.tianditu.com/DataServer?T=cva_w&tk=d590c66c56d4cc58784f8159e8aa4ea8&x={x}&y={y}&l={z}',
+      SMHUrl:
+        'http://localhost:8080/geoserver/SMH/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=SMH:shimohua3857&outputFormat=application/json',
     };
   },
   mounted() {
@@ -50,7 +55,7 @@ export default {
   },
   methods: {
     initMap() {
-      const VectorLayer = new TileLayer({
+      const VectorBaseLayer = new TileLayer({
         title: '天地图矢量',
         source: new XYZ({
           url: this.VectorUrl,
@@ -65,7 +70,14 @@ export default {
         }),
         visible: true,
       });
-
+      const SMHLayer = new VectorLayer({
+        zIndex: 10,
+        source: new VectorSource({
+          format: new GeoJSON(),
+          //KVP参数格式
+          url: this.SMHUrl,
+        }),
+      });
       const view = new View({
         // 视图
         //projection: 'EPSG:4326', // 坐标系
@@ -78,18 +90,27 @@ export default {
         // 最小缩放
         minZoom: 1,
       });
+
       const map = new Map({
         target: 'map', // 地图容器 对应id
-        layers: [VectorLayer, VectorLabelLayer], // 图层
+        layers: [VectorBaseLayer, VectorLabelLayer], // 图层
         view: view,
-
       });
+      map.addLayer(SMHLayer);
       //将view，source，map存入vuex中
       this.$store.commit('_setDefaultMapView', view);
       //this.$store.commit('_setDefaultSource', source);`````
       this.$store.commit('_setDefaultMap', map);
     },
     ChangeMap(e) {
+      const SMHLayer = new VectorLayer({
+        zIndex: 10,
+        source: new VectorSource({
+          format: new GeoJSON(),
+          //KVP参数格式
+          url: this.SMHUrl,
+        }),
+      });
       switch (e.target.title) {
         case '矢量地图':
           //清除所有图层
@@ -109,8 +130,11 @@ export default {
             }),
             visible: true,
           });
+
+          this.$store.state._defaultMap.addLayer(SMHLayer);
           this.$store.state._defaultMap.addLayer(VectorLayer);
           this.$store.state._defaultMap.addLayer(VectorLabelLayer);
+
           break;
 
         case '卫星影像':
@@ -128,6 +152,7 @@ export default {
               url: this.SatelliteLabelUrl,
             }),
           });
+          this.$store.state._defaultMap.addLayer(SMHLayer);
           this.$store.state._defaultMap.addLayer(SatelliteLayer);
           this.$store.state._defaultMap.addLayer(SatelliteLabelLayer);
           break;
@@ -140,19 +165,17 @@ export default {
             source: new XYZ({
               url: this.TerrainUrl,
             }),
-           
           });
           const TerrainLabelLayer = new TileLayer({
             title: '地形标注',
             source: new XYZ({
               url: this.TerrainLabelUrl,
             }),
-        
           });
+          this.$store.state._defaultMap.addLayer(SMHLayer);
           this.$store.state._defaultMap.addLayer(TerrainLayer);
           this.$store.state._defaultMap.addLayer(TerrainLabelLayer);
           break;
-
       }
     },
   },
