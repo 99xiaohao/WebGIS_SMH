@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <div id="map" class="map">
+    <!-- 地图 -->
+    <div id="map" class="map" @click.stop>
       <div class="map-switch-container">
         <div class="icondiv" @click="BasemapsDivShow = !BasemapsDivShow">
           <span class="tooltiptext">切换底图</span>
@@ -21,6 +22,35 @@
         </div>
       </div>
     </div>
+    <!-- 弹窗 -->
+    <el-card class="box-card" id="Popup" v-show="ShowPopup" @click.stop>
+      <div slot="header" class="clearfix" @click.stop>
+        <span id="cityName">信息</span>
+        <el-button style="float: right; padding: 3px 0" type="text" @click.stop="ShowPopupEvent">✖</el-button>
+      </div>
+      <div class="text item" id="popup-content"></div>
+    </el-card>
+
+    <!-- echarts展示区 -->
+    <div class="LeftDiv">
+      <el-button type="primary" style="position: relative; top: 30%; folat: left" @click="drawer = true" circle
+        ><i class="el-icon-caret-left" style="font-size: 20px; font-weight: bold" ref="ElIconLeft"></i
+      ></el-button>
+      <el-drawer title="我是标题" :visible.sync="drawer" :with-header="false" :modal="false" direction="ltr" style="position:absolute" size="30em">
+        <span>我来啦!</span>
+      </el-drawer>
+      <!-- <div class="LeftContainer" v-show="ShowLeftContainer"></div> -->
+    </div>
+    <div class="RightDiv">
+      <el-button type="primary" circle
+        ><i class="el-icon-caret-right" style="font-size: 20px; font-weight: bold" ref="ElIconRight"></i
+      ></el-button>
+    </div>
+
+    <!-- <div ref="Popup" class="ol-popup" id="Popup" v-show="ShowPopup">
+      <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+      <div class="popup-content" id="popup-content"></div>
+    </div> -->
   </div>
 </template>
 
@@ -34,6 +64,7 @@ import Tile from 'ol/Tile';
 import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
 import VectorLayer from 'ol/layer/Vector.js';
+import Overlay from 'ol/Overlay.js';
 export default {
   data() {
     return {
@@ -46,8 +77,14 @@ export default {
         'http://t0.tianditu.com/DataServer?T=cta_w&tk=d590c66c56d4cc58784f8159e8aa4ea8&x={x}&y={y}&l={z}',
       VectorUrl: 'http://t0.tianditu.com/DataServer?T=vec_w&tk=d590c66c56d4cc58784f8159e8aa4ea8&x={x}&y={y}&l={z}',
       VectorLabelUrl: 'http://t4.tianditu.com/DataServer?T=cva_w&tk=d590c66c56d4cc58784f8159e8aa4ea8&x={x}&y={y}&l={z}',
+      //  使用kvp格式拼写请求url  typeName指geoserver中的图层名
       SMHUrl:
         'http://localhost:8080/geoserver/SMH/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=SMH:shimohua3857&outputFormat=application/json',
+      ShowPopup: false,
+      ShowLeft: true,
+      ShowRight: true,
+      ShowLeftContainer: false,
+      drawer: false,
     };
   },
   mounted() {
@@ -99,9 +136,87 @@ export default {
       map.addLayer(SMHLayer);
       //将view，source，map存入vuex中
       this.$store.commit('_setDefaultMapView', view);
-      //this.$store.commit('_setDefaultSource', source);`````
+      //this.$store.commit('_setDefaultSource', source);
       this.$store.commit('_setDefaultMap', map);
+
+      //获取popup的dom对象
+      var container = document.getElementById('Popup');
+      var content = document.getElementById('popup-content');
+      var closer = document.getElementById('popup-closer');
+      //创建popup
+      var popup = new Overlay({
+        element: container,
+        //autoPan:true,
+        positioning: 'bottom-center',
+        //组织地图事件冒泡
+        stopEvent: true,
+        autoPanAnimation: {
+          duration: 250,
+        },
+      });
+      map.addOverlay(popup);
+
+      //关闭popup
+      // closer.onclick = function () {
+      //   popup.setPosition(undefined);
+      //   //失去焦点时触发
+      //   closer.blur();
+      //   this.ShowPopup = false;
+      //   return false;
+      // };
+
+      //点击弹窗
+      map.on('singleclick', (e) => {
+        //e是MapBrowserEvent对象
+        console.log('e', e);
+        //
+        let feature = map.forEachFeatureAtPixel(e.pixel, (feature) => {
+          //回调返回点击的要素
+          return feature;
+        });
+        console.log('@', feature);
+        //判断点击处是否有要素
+        //let IFfeature = map.hasFeatureAtPixel(e.pixel)
+        //获取点击处的所有所有要素
+        //let feature = map.getFeaturesAtPixel(e.pixel);
+
+        if (feature) {
+          console.log('feature');
+          this.ShowPopup = true;
+          //清空html
+          content.innerHTML = '';
+          //名称
+          var cityName = document.getElementById('cityName');
+          cityName.innerText = feature.get('name');
+
+          // 省份编码
+          var provinceCode = document.createElement('p');
+          provinceCode.innerText = '县编码：' + feature.get('admincode');
+          content.appendChild(provinceCode);
+          // 重度比
+          var provinceCode = document.createElement('p');
+          provinceCode.innerText = '重度比：' + feature.get('重度比');
+          content.appendChild(provinceCode);
+          // const coordinate = feature.getGeometry().getCoordinates()
+          // console.log('coordinate',coordinate)
+          //弹出popup
+          popup.setPosition(e.coordinate);
+        } else {
+          this.ShowPopup = false;
+        }
+      });
+
+      //鼠标在要素上时改变样式
+      // map.on('pointermove', (e) => {
+      //   if (map.hasFeatureAtPixel(e.pixel)) {
+      //     map.getViewport().style.cursor = 'pointer';
+      //   } else {
+      //     map.getViewport().style.cursor = 'inherit';
+      //   }
+      // });
     },
+
+    //切换地图
     ChangeMap(e) {
       const SMHLayer = new VectorLayer({
         zIndex: 10,
@@ -178,11 +293,30 @@ export default {
           break;
       }
     },
+
+    ShowPopupEvent(e) {
+      console.log('e', e);
+      this.ShowPopup = false;
+      e.stopPropagation();
+      e.preventDefault();
+    },
+    //左侧DIV显示控制
+    LeftDivChange(e) {
+      if (this.$refs.ElIconLeft.className == 'el-icon-caret-right') {
+        this.$refs.ElIconLeft.className = 'el-icon-caret-left';
+        console.log('this', this.ShowLeftContainer);
+        this.ShowLeftContainer = !this.ShowLeftContainer;
+      } else {
+        console.log('this', this.ShowLeftContainer);
+        this.$refs.ElIconLeft.className = 'el-icon-caret-right';
+        this.ShowLeftContainer = !this.ShowLeftContainer;
+      }
+    },
   },
 };
 </script>
 
-<style>
+<style scoped >
 #app,
 #map {
   z-index: 1;
@@ -191,6 +325,7 @@ export default {
   height: 100%;
 }
 
+/* 地图切换部分样式 */
 .icon {
   width: 1.9em;
   height: 1.9em;
@@ -258,5 +393,65 @@ export default {
 }
 .basemap {
   margin: 3px;
+}
+
+/* 弹窗部分样式 */
+.text {
+  font-size: 1em;
+}
+
+.item {
+  margin: 0px;
+  background-color: #ffffff;
+  border: none;
+  text-align: left;
+  padding: 5px;
+  height: auto;
+}
+
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: '';
+}
+.clearfix:after {
+  clear: both;
+}
+
+.box-card {
+  width: 240px;
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial,
+    sans-serif;
+}
+.el-card__header {
+  padding: 2px;
+  font-size: 1.2em;
+  line-height: 40px;
+}
+/* echart */
+.LeftDiv {
+  position: absolute;
+  height: 600px;
+
+  left: 16%;
+  top: 20%;
+  z-index: 5;
+  /* background-color: #eef4fc; */
+  /* transition: all 0.5s ease; */
+}
+.RightDiv {
+  position: absolute;
+  right: 1%;
+  bottom: 40%;
+  z-index: 5;
+}
+.LeftContainer {
+  position: relative;
+  float: left;
+  width: 200px;
+  height: 500px;
+  background-color: aqua;
+  /* display:none; */
+  transition: all 0.5s ease;
 }
 </style>

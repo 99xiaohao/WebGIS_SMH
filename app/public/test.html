@@ -5,17 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <script src="./js/iconfont.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" />
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
   </head>
 
   <body>
-    <div class="map-switch-container">
+    <!-- <div class="map-switch-container">
       <svg class="icon" aria-hidden="true">
         <use xlink:href="#icon-ditu1"></use>
       </svg>
-    </div>
+    </div> -->
+
+    <el-card class="box-card" id="Popup"  header="height:20px">
+      <div slot="header" class="clearfix" >
+        <span style="display: block;height: 100%;" id="cityName">信息</span>
+        <el-button style="float: right; padding: 3px 0" type="text" @click="ShowPopup = false">✖</el-button>
+      </div>
+      <div class="text item" id="popup-content"></div>
+    </el-card>
   </body>
   <style>
-    .map-switch-container {
+    /* .map-switch-container {
         background: #fff;
     border-radius: 2px;
     bottom: 120px;
@@ -34,6 +46,31 @@
       vertical-align: -0.15em;
       fill: currentColor;
       overflow: hidden;
-    }
+    } */
+
+    .text {
+    font-size: 14px;
+  }
+
+  .item {
+    margin-bottom: 18px;
+  }
+
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    content: "";
+  }
+  .clearfix:after {
+    clear: both
+  }
+
+  .box-card {
+    width: 200px;
+  }
+  .el-card__header {
+  padding: 2px 10px;
+  
+}
   </style>
 </html>

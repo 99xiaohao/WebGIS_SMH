@@ -58,78 +58,17 @@
 
 
 <script>
-import Header from '@/components/Header';
-import Main from '@/components/Main';
-import MapView from '@/components/common/MapView.vue';
-import AdvancedViewPosition from '@/pages/Demo/AdvancedViewPosition.vue';
-import Demo from '@/pages/Demo/index.vue';
+//引入ol样式
+import "ol/ol.css";
 export default {
   name: 'App',
   components: {
-    Header,
-    Main,
-    MapView,
 
-    AdvancedViewPosition,
   },
   data() {
     return {
       data: [
-        {
-          label: 'AdvancdViewPosition',
-          children: [
-            // {
-            //   label: '二级 1-1',
-            //   children: [
-            //     {
-            //       label: '三级 1-1-1',
-            //     },
-            //   ],
-            // },
-          ],
-        },
-        {
-          label: 'AnimatedGIF',
-          children: [
-            // {
-            //   label: '二级 2-1',
-            //   children: [
-            //     {
-            //       label: '三级 2-1-1',
-            //     },
-            //   ],
-            // },
-            // {
-            //   label: '二级 2-2',
-            //   children: [
-            //     {
-            //       label: '三级 2-2-1',
-            //     },
-            //   ],
-            // },
-          ],
-        },
-        {
-          label: '一级 3',
-          children: [
-            // {
-            //   label: '二级 3-1',
-            //   children: [
-            //     {
-            //       label: '三级 3-1-1',
-            //     },
-            //   ],
-            // },
-            // {
-            //   label: '二级 3-2',
-            //   children: [
-            //     {
-            //       label: '三级 3-2-1',
-            //     },
-            //   ],
-            // },
-          ],
-        },
+        
       ],
       defaultProps: {
         children: 'children',
